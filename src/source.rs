@@ -12,6 +12,9 @@ pub mod fuzzysearch;
 #[cfg(feature = "iqdb")]
 /// The source for `iqdb.org`.
 pub mod iqdb;
+#[cfg(feature = "yandex")]
+/// The source for `yandex.com`.
+pub mod yandex;
 
 /// The generic trait implemented by all sources under this module.
 #[async_trait]

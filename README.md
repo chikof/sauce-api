@@ -2,7 +2,7 @@
 
 [![documentation](https://docs.rs/sauce-api/badge.svg)](https://docs.rs/sauce-api) [![crates.io](https://img.shields.io/crates/v/sauce-api)](https://crates.io/crates/sauce-api)
 
-sauce-api is an API for finding the source image for low-quality or cropped images.  
+sauce-api is an API for finding the source image for low-quality or cropped images.
 Currently it only works with anime-styled images, but I hope to makeit capable of doing other kinds of images as well.
 
 Asynchronous due to the usage of `reqwest`, and works best with Tokio.
@@ -12,6 +12,7 @@ Asynchronous due to the usage of `reqwest`, and works best with Tokio.
 - [IQDB](https://iqdb.org) (`iqdb` feature)
 - [saucenao](https://saucenao.com) (`saucenao` feature)
 - [fuzzysearch](https://fuzzysearch.net) (`fuzzysearch` feature)
+- [yandex](https://yandex.com) (`yandex` feature)
 
 If you wish to see more, please submit PRs or a request in an issue!
 
@@ -59,7 +60,6 @@ async fn find_source(url: &str, api_key: &str) {
 }
 ```
 
-
 ### Fuzzysearch
 
 ```rust
@@ -68,6 +68,27 @@ use sauce_api::error::Error;
 
 async fn find_source(url: &str, api_key: &str) {
     let source = FuzzySearch::create(api_key.to_string()).await.unwrap();
+    let res: Result<Output, Error> = source.check(url).await;
+
+    match res {
+        Ok(result) => {
+            println!("Found results! {:?}", result);
+        }
+        Err(e) => {
+            eprintln!("Unable to find results: {}", e);
+        }
+    }
+}
+```
+
+### Yandex
+
+```rust
+use sauce_api::source::{Output, yandex::Yandex, Source};
+use sauce_api::error::Error;
+
+async fn find_source(url: &str) {
+    let source = Yandex::create(()).await.unwrap();
     let res: Result<Output, Error> = source.check(url).await;
 
     match res {
